@@ -68,6 +68,7 @@ public class Main {
                 else {
                     fileNames.add(file.getFileName());
                     futures.add(pool.submit(new SortCallable(file)));
+                    System.out.println(file);
                 }
             }
 
@@ -142,8 +143,11 @@ public class Main {
         System.out.println("Write in file: " + destDirectory + "\\" + p);
         Path destFile = Files.createFile(Paths.get(destDirectory + "\\" + p));
         FileWriter writer = new FileWriter(String.valueOf(destFile), false);
-        for(String c: content) {
-            writer.write(c + '\n');
+        for(int i=0; i<content.size(); i++) {
+            if(i< content.size()-1)
+                writer.write(content.get(i) + '\n');
+            else
+                writer.write(content.get(i));
         }
         writer.flush();
         System.out.println("Write in file: " + destDirectory + "\\" + p + " completed");
