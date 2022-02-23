@@ -68,7 +68,6 @@ public class Main {
                 else {
                     fileNames.add(file.getFileName());
                     futures.add(pool.submit(new SortCallable(file)));
-                    System.out.println(file);
                 }
             }
 

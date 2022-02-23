@@ -65,7 +65,6 @@ public class Main {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("done");
     }
 
     public static Path createDirectory(String destUrl) throws IOException, InterruptedException {
@@ -86,7 +85,6 @@ public class Main {
 
     public static void enumerate(Path directory) throws IOException, InterruptedException {
         try (Stream<Path> children = Files.list(directory)) {
-            System.out.println("Start enumerator");
             for (Path child: children.toList()){
                 if (Files.isDirectory(child)) {
                     enumerate(child);
@@ -96,7 +94,6 @@ public class Main {
                     System.out.println("found file: " + child);
                 }
             }
-            System.out.println("End enumerator");
         }
     }
 
