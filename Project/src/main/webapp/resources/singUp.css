@@ -1,0 +1,49 @@
+#pib {
+    width: 313px;
+    display: block;
+    margin-top: 10px;
+}
+
+#phoneNumber {
+    margin-left: 8px;
+}
+
+#login {
+    width: 236px;
+}
+
+#password {
+    margin-left: 14px;
+    width: 236px;
+}
+
+.authTitle {
+    margin-top: 25px;
+}
+
+.authForm {
+    margin: 20px auto;
+    width: 320px;
+}
+
+.authForm>.formBlock {
+    margin-top: 10px;
+}
+
+input {
+    font-size: 15px;
+}
+
+.authForm>.formBlock>#login {
+    margin-left: 31px;
+}
+.authButtonDiv {
+    display: flex;
+    justify-content: center;
+}
+
+.authButton {
+    margin-top: 15px;
+    font-size: 17px;
+    padding: 2px;
+}

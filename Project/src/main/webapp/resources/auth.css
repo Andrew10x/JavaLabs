@@ -1,0 +1,37 @@
+.authTitle {
+    margin-top: 25px;
+}
+
+.authForm {
+    margin: 20px auto;
+    width: 319px;
+}
+
+.authForm>.formBlock {
+    margin-top: 15px;
+}
+
+input {
+    font-size: 15px;
+}
+
+.formBlock>input {
+    width: 240px;
+}
+
+.authForm>.formBlock>#login {
+    margin-left: 31px;
+}
+.authButtonDiv {
+    display: flex;
+    justify-content: center;
+}
+
+.authButton {
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+.password {
+    margin-left: 14px;
+}

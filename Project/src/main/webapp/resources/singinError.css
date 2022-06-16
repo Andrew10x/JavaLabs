@@ -1,0 +1,8 @@
+.errorBlock {
+    width: 267px;
+    font-size: 18px;
+    margin: 40px auto;
+}
+.errorBlock>div {
+    margin-bottom: 10px;
+}

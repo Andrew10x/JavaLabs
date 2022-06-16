@@ -1,0 +1,58 @@
+.calcPriceForm {
+    margin: 0 auto;
+    background: #f0efef;
+    padding: 20px 30px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    width: 500px;
+}
+
+.block {
+    display: flex;
+    margin-top: 10px;
+}
+
+.marg {
+    margin-top: 10px;
+}
+
+.weight {
+    margin-right: 5px;
+}
+
+.leftBlock {
+    margin-right: 40px;
+}
+
+.inputNumb {
+    width: 55px;
+    text-align: center;
+}
+
+.sizeBlock {
+    margin-right: 20px;
+}
+
+.metrics {
+    margin-left: 5px;
+}
+
+.calcButton {
+    padding: 5px;
+    background: #9fe58d;
+    border-radius: 5px;
+    margin: 20px auto 0 auto;
+    display: flex;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.calcRes {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: 500;
+}
