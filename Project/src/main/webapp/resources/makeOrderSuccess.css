@@ -1,0 +1,8 @@
+.successBlock {
+    width: 467px;
+    font-size: 18px;
+    margin: 40px auto;
+}
+.successBlock>div {
+    margin-bottom: 10px;
+}

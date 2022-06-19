@@ -1,10 +1,14 @@
-.calcPriceForm {
+.calcPriceForm, .makeOrderForm, .orderForm {
     margin: 0 auto;
     background: #f0efef;
     padding: 20px 30px;
     border: 1px solid grey;
     border-radius: 5px;
     width: 500px;
+}
+
+.orderForm {
+    margin-top: 30px;
 }
 
 .block {
@@ -41,7 +45,7 @@
     padding: 5px;
     background: #9fe58d;
     border-radius: 5px;
-    margin: 20px auto 0 auto;
+    margin: 25px auto 0 auto;
     display: flex;
 }
 
@@ -55,4 +59,44 @@ h2 {
     margin-top: 10px;
     font-size: 20px;
     font-weight: 500;
+}
+
+.boldDiv {
+    font-weight: 500;
+    font-size: 17px;
+    padding-top: 5px;
+}
+
+#pibRec {
+    margin-left: 5px;
+    width: 270px;
+    padding: 1px;
+}
+
+#telRec {
+    width: 171px;
+    margin-left: 5px;
+    padding: 1px;
+}
+
+#addressRec {
+    display: block;
+    margin-top: 10px;
+    width: 399px;
+    padding: 2px;
+}
+
+select {
+    padding: 1px;
+}
+
+#cityFrom, #cityTo {
+    margin-top: 3px;
+}
+
+.resCost {
+    width: 270px;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 25px auto 0 auto;
 }

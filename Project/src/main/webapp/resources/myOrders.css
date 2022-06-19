@@ -1,0 +1,22 @@
+.myOrderItem {
+    margin: 10px 80px 0 80px;
+    display: grid;
+    grid-template-columns: 1.35fr 1.1fr 1.1fr 1.4fr 0.9fr 1.3fr 1fr;
+    border: 1px solid;
+    padding: 10px;
+    background: #e6e6e5;
+    border-radius: 6px;
+    grid-gap: 10px;
+}
+
+.myOrdersBlock {
+    margin-top: 25px;
+}
+
+.myOrderItem>.withBorder {
+    border-right: 1px solid;
+}
+
+.moTitle {
+    margin-top: 30px;
+}

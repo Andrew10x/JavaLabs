@@ -1,12 +1,10 @@
 package letscode;
-import model.PasswordAndRoleModel;
+
+import model.*;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import java.security.NoSuchAlgorithmException;
 
 import DB.DBSingleton;
-import model.CityModel;
-import model.ConstantsModel;
-import model.UserModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +15,60 @@ import java.util.List;
 
 public class Test {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        getPR();
+        String s = "12345678901234567890123456789";
+        System.out.println(s.substring(0, 5));
+    }
+
+    public static void getOrdersJoined() throws SQLException {
+        DBQueries dbq = new DBQueries();
+        List<OrderJoinedModel> ojml =  dbq.gerOrdersJoined("svt.andrey1631@gmail.com");
+        OrderJoinedModel ojm = ojml.get(0);
+
+        System.out.println(ojm.getAddress());
+        System.out.println(ojm.getRecipientName());
+    }
+
+    public static void getStatusId() throws SQLException {
+        DBQueries dbq = new DBQueries();
+        int resId = dbq.getStatusId("Підтверджено");
+        System.out.println(resId);
+    }
+    public static void getDirectionId() throws SQLException {
+        DBQueries dbq = new DBQueries();
+        int resId = dbq.getDirectionId(3, 5);
+        System.out.println(resId);
+    }
+    public static void addRecipient() throws SQLException {
+        DBQueries dbq = new DBQueries();
+        RecipientModel rm = new RecipientModel();
+        rm.setRecipientName("Дяченко Максим Євгенович");
+        rm.setRecipientPhone("+380933345412");
+        int resId = dbq.addRecipient(rm);
+        System.out.println(resId);
+    }
+    public static void getUserId() throws SQLException {
+        DBQueries dbq = new DBQueries();
+        int resId = dbq.getUserIdByEmail("svt.andrey1631@gmail.com");
+        System.out.println(resId);
+    }
+
+    public static void setOrder() throws SQLException {
+        DBQueries dbq = new DBQueries();
+        OrderModel om = new OrderModel();
+        om.setUserId(1);
+        om.setDirectionId(2);
+        om.setStatusId(1);
+        om.setWeightOrd(20f);
+        om.setLengthOrd(30);
+        om.setHeightOrd(40);
+        om.setWidthOrd(20);
+        om.setTypeId(1);
+        om.setSumInsured(100f);
+        om.setAdress("м. Київ, вулиця Підлісна 5, 3 під'їзд, кв. 155");
+        om.setDeliveryCost(75f);
+        om.setRecipientId(1);
+        int resId = dbq.addOrder(om);
+        System.out.println(resId);
     }
 
     public static void getPR() throws SQLException {

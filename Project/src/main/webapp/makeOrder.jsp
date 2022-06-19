@@ -5,14 +5,31 @@
 <head>
     <title>Title</title>
     <link href="${pageContext.request.contextPath}/resources/calcPrice.css" rel="stylesheet">
+    <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
 <% List<CityModel> cities = (List) request.getAttribute("cities"); %>
-<h2>Розрахунок вартості доставки</h2>
+<c:import url="/HeaderServ" />
+<h2>Створити замовлення</h2>
 <br />
-<form id="calcPriceForm" class="calcPriceForm" method="post" action="${pageContext.request.contextPath}/">
+<form id="makeOrderForm" class="makeOrderForm" method="post" action="${pageContext.request.contextPath}/MakeOrder">
     <div>
-        <div class="boldDiv">Маршрут</div>
+        <div class="boldDiv">Отримувач</div>
+        <div>
+            <div class="marg">
+                <label for="pibRec">ПІБ отримувача</label>
+                <input name="pibRec" id="pibRec" />
+            </div>
+            <div class="marg">
+                <label for="telRec">Номер телефону отримувача</label>
+                <input name="telRec" id="telRec" />
+            </div>
+        </div>
+        <div class="marg">
+            <label for="addressRec">Адреса доставки</label>
+            <input name="addressRec" id="addressRec" />
+        </div>
+        <div class="marg boldDiv">Маршрут</div>
         <div class="block">
             <div class="leftBlock">
                 <label for="cityFrom">місто-відправник</label>
@@ -68,7 +85,7 @@
                 <div class="metrics">см</div>
             </div>
         </div>
-        <button class="calcButton" type="submit">Розрахувати вартість</button>
+        <button class="calcButton" type="submit">Створити замовлення</button>
     </div>
 </form>
 
@@ -85,5 +102,6 @@
     });
 </script>
 </body>
+
 
 

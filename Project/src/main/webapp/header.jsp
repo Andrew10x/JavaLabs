@@ -19,8 +19,8 @@
         <div ><a href = "${pageContext.request.contextPath}/auth/singin.jsp" >Вхід</a ></div >
         <div ><a href = "${pageContext.request.contextPath}/auth/singup.jsp" >Реєстрація</a ></div >
         <%} else {%>
-        <div ><a href = "${pageContext.request.contextPath}/auth/singin.jsp" >Створити замовлення</a ></div >
-        <div ><a href = "${pageContext.request.contextPath}/auth/singup.jsp" >Мої замовлення</a ></div >
+        <div ><a href = "${pageContext.request.contextPath}/MakeOrder" >Створити замовлення</a ></div >
+        <div ><a href = "${pageContext.request.contextPath}/MyOrders" >Мої замовлення</a ></div >
         <div ><a href = "${pageContext.request.contextPath}/ExitServ" >Вийти</a ></div >
         <%}%>
     </div>
