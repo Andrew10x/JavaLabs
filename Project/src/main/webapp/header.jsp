@@ -9,7 +9,14 @@
 </head>
 <body>
 <%
-    String UserRole = (String) request.getAttribute("UserRole");
+    Cookie[] cookies = request.getCookies();
+    String UserRole = "";
+    if (cookies != null) {
+        for (Cookie c : cookies) {
+            if(Objects.equals(c.getName(), "UserRole"))
+                UserRole = c.getValue();
+        }
+    }
 %>
 <header>
     <div class="header-title">Fast Delivery</div>
@@ -21,6 +28,9 @@
         <%} else {%>
         <div ><a href = "${pageContext.request.contextPath}/MakeOrder" >Створити замовлення</a ></div >
         <div ><a href = "${pageContext.request.contextPath}/MyOrders" >Мої замовлення</a ></div >
+        <%if(Objects.equals(UserRole, "Manager")) {%>
+        <div ><a href = "${pageContext.request.contextPath}/AllOrders" >Всі замовлення</a ></div >
+        <%}%>
         <div ><a href = "${pageContext.request.contextPath}/ExitServ" >Вийти</a ></div >
         <%}%>
     </div>

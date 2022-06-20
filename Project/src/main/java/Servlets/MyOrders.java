@@ -22,7 +22,7 @@ public class MyOrders extends HttpServlet {
         String email = getEmail(req);
         List<OrderJoinedModel> data;
         try {
-            data = dbq.gerOrdersJoined(email);
+            data = dbq.getOrdersJoined(0, email, "", "", "", "");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

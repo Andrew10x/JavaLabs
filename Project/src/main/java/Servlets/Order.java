@@ -18,19 +18,21 @@ import java.util.Objects;
 public class Order extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().write(req.getRequestURI() + "\n");
         Map<String, String[]> mp = req.getParameterMap();
         int id = Integer.parseInt(mp.get("id")[0]);
 
         DBQueries dbq = new DBQueries();
-        OrderJoinedModel ojm = new OrderJoinedModel();
+        OrderJoinedModel ojm;
         try {
-            ojm = dbq.getOrderJoined(getEmail(req));
+            ojm = dbq.getOrderJoined(id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         req.setAttribute("ojm", ojm);
+        if(mp.containsKey("print")) {
+            req.setAttribute("print", true);
+        }
         getServletContext().getRequestDispatcher("/order.jsp").forward(req, resp);
     }
 

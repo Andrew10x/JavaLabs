@@ -10,7 +10,7 @@
 <div class="successBlock">
     <div>Ваше замовлення <b><%=request.getAttribute("id")%></b> створено і очікує підтвердження менеджером.
         Після того, як замовлення буде підтверджено, ви зможете його оплатити</div>
-    <div>Перейти на сторінку: <a href = "${pageContext.request.contextPath}/myOrders.jsp" >мої замовлення</a ></div >
+    <div>Перейти на сторінку: <a href = "${pageContext.request.contextPath}/MyOrders" >мої замовлення</a ></div >
     <div>Перейти на <a href = "${pageContext.request.contextPath}/" >головну сротінку</a ></div>
 </div>
 </body>

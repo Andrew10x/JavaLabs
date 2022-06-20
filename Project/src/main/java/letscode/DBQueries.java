@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DBQueries {
     private Connection con = null;
@@ -35,6 +36,30 @@ public class DBQueries {
         }
         return cml;
     }
+
+    public List<StatusesModel> getStatuses() throws SQLException {
+        List<StatusesModel> sml;
+        try {
+            con = DBSingleton.getInstance().getConnection();
+            pr = con.prepareStatement("select * from statuses");
+            ResultSet res = pr.executeQuery();
+            sml = new ArrayList<>();
+            while (res.next()) {
+                StatusesModel cm = new StatusesModel(res.getInt(1), res.getString(2));
+                sml.add(cm);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (pr != null)
+                pr.close();
+            if (con != null)
+                con.close();
+        }
+        return sml;
+    }
+
+
 
     public ConstantsModel getConstants(String name) throws SQLException {
         ConstantsModel cm = new ConstantsModel();
@@ -278,25 +303,47 @@ public class DBQueries {
         return DirectionId;
     }
 
-    public List<OrderJoinedModel> gerOrdersJoined(String email) throws SQLException {
+    public List<OrderJoinedModel> getOrdersJoined(int id, String email, String status, String date,
+                                                  String cityFrom,
+                                                  String cityTo) throws SQLException {
         List<OrderJoinedModel> resList = new ArrayList<>();
+
+        String s = "select o.id, o.dateord, o.statusid, o.weightord, o.lengthord," +
+                " o.widthord, o.heightord, o.suminsured, o.adress, \n" +
+                "o.deliverycost, u.username, u.phone, u.email, cit.cityname as cityfrom, " +
+                "cit2.cityname as cityto, s.statusname,\n" +
+                "ct.typename, r.recipientname, r.recipientphone\n" +
+                "from Orders o \n" +
+                "join Users u on o.userid = u.userid \n" +
+                "join Directions d on o.directionid = d.directionid \n" +
+                "join Cities cit on d.cityfromid = cit.cityid\n" +
+                "join Cities cit2 on d.citytoid = cit2.cityid\n" +
+                "join Statuses s on o.statusid = s.statusid\n" +
+                "join Cargotypes ct on o.typeid = ct.typeid\n" +
+                "join Recipients r on o.recipientid = r.recipientid\n" +
+                "where true ";
+        if(id > 0)
+            s += " and o.id = '" + id + "' ";
+
+        if(!Objects.equals(email, ""))
+            s += " and u.email = '" + email + "' ";
+
+        if(!Objects.equals(status, ""))
+            s += " and s.statusname = '" + status + "' ";
+
+        if(!Objects.equals(date, ""))
+            s += " and date(o.dateord) = '" + date + "' ";
+
+        if(!Objects.equals(cityFrom, ""))
+            s += " and cit.cityname = '" + cityFrom + "' ";
+
+        if(!Objects.equals(cityTo, ""))
+            s += " and cit2.cityname = '" + cityTo + "' ";
+
+        System.out.println(s);
         try {
             con = DBSingleton.getInstance().getConnection();
-            pr = con.prepareStatement("select o.id, o.dateord, o.statusid, o.weightord, o.lengthord," +
-                    " o.widthord, o.heightord, o.suminsured, o.adress, \n" +
-                    "o.deliverycost, u.username, u.phone, u.email, cit.cityname as cityfrom, " +
-                    "cit2.cityname as cityto, s.statusname,\n" +
-                    "ct.typename, r.recipientname, r.recipientphone\n" +
-                    "from Orders o \n" +
-                    "join Users u on o.userid = u.userid \n" +
-                    "join Directions d on o.directionid = d.directionid \n" +
-                    "join Cities cit on d.cityfromid = cit.cityid\n" +
-                    "join Cities cit2 on d.citytoid = cit2.cityid\n" +
-                    "join Statuses s on o.statusid = s.statusid\n" +
-                    "join Cargotypes ct on o.typeid = ct.typeid\n" +
-                    "join Recipients r on o.recipientid = r.recipientid\n" +
-                    "where u.email = ?");
-            pr.setString(1, email);
+            pr = con.prepareStatement(s);
             ResultSet res = pr.executeQuery();
             while (res.next()) {
                 OrderJoinedModel ojm = new OrderJoinedModel();
@@ -314,7 +361,7 @@ public class DBQueries {
         return resList;
     }
 
-    public OrderJoinedModel getOrderJoined(String email) throws SQLException {
+    public OrderJoinedModel getOrderJoined(int id) throws SQLException {
         OrderJoinedModel ojm = new OrderJoinedModel();
         try {
             con = DBSingleton.getInstance().getConnection();
@@ -331,8 +378,8 @@ public class DBQueries {
                     "join Statuses s on o.statusid = s.statusid\n" +
                     "join Cargotypes ct on o.typeid = ct.typeid\n" +
                     "join Recipients r on o.recipientid = r.recipientid\n" +
-                    "where u.email = ?");
-            pr.setString(1, email);
+                    "where o.id = ?");
+            pr.setInt(1, id);
             ResultSet res = pr.executeQuery();
             if (res.next()) {
                 setOjm(ojm, res);
@@ -372,6 +419,25 @@ public class DBQueries {
         ojm.setTypeName(res.getString(17));
         ojm.setRecipientName(res.getString(18));
         ojm.setRecipientPhone(res.getString(19));
+    }
+
+    public boolean changeStatus(int orderId, int statusId) throws SQLException {
+        boolean result;
+        try {
+            con = DBSingleton.getInstance().getConnection();
+            pr = con.prepareStatement("UPDATE orders Set statusid = ? WHERE id = ? RETURNING id");
+            pr.setInt(1, statusId);
+            pr.setInt(2, orderId);
+            result = pr.executeQuery().next();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (pr != null)
+                pr.close();
+            if (con != null)
+                con.close();
+        }
+        return result;
     }
 
 }

@@ -100,3 +100,41 @@ select {
     font-weight: 600;
     margin: 25px auto 0 auto;
 }
+
+.payForm {
+    margin: 0 auto;
+    background: #f0efef;
+    padding: 20px 30px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    width: 410px;
+}
+
+.cardNumber {
+    width: 53px;
+}
+
+.margLeft5 {
+   margin-left: 5px;
+}
+
+#month, #year {
+    width: 38px;
+}
+
+.cvcL {
+    margin-left: 75px;
+}
+
+#cvc {
+    width: 45px;
+}
+
+#pib {
+    padding: 1px;
+    width: 225px;
+}
+
+.centerText {
+    text-align: center;
+}

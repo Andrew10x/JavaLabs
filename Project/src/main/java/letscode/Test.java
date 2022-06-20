@@ -2,7 +2,6 @@ package letscode;
 
 import model.*;
 import org.jasypt.util.password.BasicPasswordEncryptor;
-import java.security.NoSuchAlgorithmException;
 
 import DB.DBSingleton;
 
@@ -11,21 +10,44 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Test {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        String s = "12345678901234567890123456789";
-        System.out.println(s.substring(0, 5));
+       changeStatus();
+    }
+
+    public static void changeStatus() throws SQLException {
+        DBQueries dbq = new DBQueries();
+        System.out.println(dbq.changeStatus(1, 1));
+    }
+
+    public static String transfDate(String date) {
+        if(Objects.equals(date, ""))
+            return "";
+        return date.substring(6, 10) + '-' + date.substring(3, 5) + '-' + date.substring(0, 2);
+    }
+
+    public static void getStatuses() throws SQLException {
+        DBQueries dbq = new DBQueries();
+        List<StatusesModel> sml = dbq.getStatuses();
+        for(StatusesModel sm: sml) {
+            System.out.println(sm.getStatusid() + " " + sm.getStatusname());
+        }
     }
 
     public static void getOrdersJoined() throws SQLException {
         DBQueries dbq = new DBQueries();
-        List<OrderJoinedModel> ojml =  dbq.gerOrdersJoined("svt.andrey1631@gmail.com");
-        OrderJoinedModel ojm = ojml.get(0);
+        List<OrderJoinedModel> ojml =  dbq.getOrdersJoined(0, "",
+                "Створено", "", "", "");
+        if(ojml.size() > 0) {
+            OrderJoinedModel ojm = ojml.get(0);
 
-        System.out.println(ojm.getAddress());
-        System.out.println(ojm.getRecipientName());
+            System.out.println(ojm.getAddress());
+            System.out.println(ojm.getRecipientName());
+            System.out.println(ojm.getCityFrom() + ojm.getCityTo());
+        }
     }
 
     public static void getStatusId() throws SQLException {

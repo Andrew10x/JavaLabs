@@ -9,9 +9,17 @@
 <body>
 <c:import url="/HeaderServ" />
 <% OrderJoinedModel ojm = (OrderJoinedModel) request.getAttribute("ojm"); %>
-<form id="orderForm" class="orderForm" method="post" action="${pageContext.request.contextPath}/">
-    <div>
-        <div class="boldDiv">Отримувач</div>
+<% boolean print = false;
+    if(request.getAttribute("print") != null )
+        print = (boolean) request.getAttribute("print"); %>
+<% if(!print) {%>
+<form id="orderForm" class="orderForm" method="post" action="${pageContext.request.contextPath}/PayOrder">
+    <%} else {%>
+    <form id="orderForm" class="orderForm" method="post" action="${pageContext.request.contextPath}/PrintOrder">
+    <%}%>
+        <div>
+        <div class="boldDiv centerText">Номер замовлення: <%=ojm.getId()%></div>
+            <div class="boldDiv">Отримувач</div>
         <div>
             <div class="marg">
                 <label for="pibRec">ПІБ отримувача</label>
@@ -34,7 +42,7 @@
             </div>
             <div>
                 <label for="cityTo">місто-одержувач</label>
-                <input id="cityTo" readonly="readonly" value="<%=ojm.getCityTo()%>>"/>
+                <input id="cityTo" readonly="readonly" value="<%=ojm.getCityTo()%>"/>
             </div>
         </div>
     </div>
@@ -74,7 +82,11 @@
         <div class="marg block resCost">
             <div>Вартість доставки: <%=(int) ojm.getDeliveryCost()%> грн.</div>
         </div>
+        <%if(!print) {%>
         <button class="calcButton" type="submit">Оплатити</button>
+        <%} else {%>
+        <button class="calcButton" type="submit">Роздрукувати квитанцію</button>
+        <%}%>
     </div>
 </form>
 </body>

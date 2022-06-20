@@ -69,11 +69,10 @@ public class MakeOrderServ extends HttpServlet {
             RecipientModel rm = new RecipientModel();
             rm.setRecipientName(mp.get("pibRec")[0]);
             rm.setRecipientPhone(mp.get("telRec")[0]);
-            //int recId = dbq.addRecipient(rm);
-            //om.setRecipientId(recId);
+            int recId = dbq.addRecipient(rm);
+            om.setRecipientId(recId);
 
-            //int resId = dbq.addOrder(om);
-            int resId = 23235;
+            int resId = dbq.addOrder(om);
             req.setAttribute("id", resId);
             getServletContext().getRequestDispatcher("/makeOrder/makeOrderSuccess.jsp").forward(req, resp);
         } catch (SQLException e) {

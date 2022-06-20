@@ -74,11 +74,31 @@
 
 <script>
     const form = document.querySelector('#calcPriceForm');
-    const weight = document.querySelector('#pCost');
+    const pCost = document.querySelector('#pCost');
+    const weight = document.querySelector('#weight');
+    const l = document.querySelector('#length');
+    const width= document.querySelector('#width');
+    const height = document.querySelector('#height');
     form.addEventListener('submit', function(evt) {
         evt.preventDefault();
+        if(!pCost.value) {
+            alert('Введіть оголошену вартість');
+            return;
+        }
         if(!weight.value) {
-            alert('Поле имя не заполнено');
+            alert('Введіть масу');
+            return;
+        }
+        if(!l.value) {
+            alert('Введіть довжину');
+            return;
+        }
+        if(!width.value) {
+            alert('Введіть ширину');
+            return;
+        }
+        if(!height.value) {
+            alert('Введіть висоту');
             return;
         }
         this.submit();

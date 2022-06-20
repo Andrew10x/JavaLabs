@@ -52,8 +52,8 @@
     <div class="marg">
         <label for="pType">Вид відправлення</label>
         <select name="pType" id="pType">
-            <option value="1">Посилки</option>
-            <option value="2">Вантажі</option>
+            <option value="2">Посилки</option>
+            <option value="1">Вантажі</option>
         </select>
     </div>
     <div class="marg">
@@ -90,12 +90,48 @@
 </form>
 
 <script>
-    const form = document.querySelector('#calcPriceForm');
-    const weight = document.querySelector('#pCost');
+    const form = document.querySelector('#makeOrderForm');
+    const pibRec = document.querySelector('#pibRec');
+    const telRec = document.querySelector('#telRec');
+    const addressRec = document.querySelector('#addressRec');
+    const pCost = document.querySelector('#pCost');
+    const weight = document.querySelector('#weight');
+    const l = document.querySelector('#length');
+    const width= document.querySelector('#width');
+    const height = document.querySelector('#height');
     form.addEventListener('submit', function(evt) {
         evt.preventDefault();
+        if(!pibRec.value) {
+            alert('Введіть ПІБ отримувача');
+            return;
+        }
+        if(!telRec.value) {
+            alert('Введіть номер телефону отримувача');
+            return;
+        }
+        if(!addressRec.value) {
+            alert('Введіть адресу отримувача');
+            return;
+        }
+
+        if(!pCost.value) {
+            alert('Введіть оголошену вартість');
+            return;
+        }
         if(!weight.value) {
-            alert('Поле имя не заполнено');
+            alert('Введіть масу');
+            return;
+        }
+        if(!l.value) {
+            alert('Введіть довжину');
+            return;
+        }
+        if(!width.value) {
+            alert('Введіть ширину');
+            return;
+        }
+        if(!height.value) {
+            alert('Введіть висоту');
             return;
         }
         this.submit();
