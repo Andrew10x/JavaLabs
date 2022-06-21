@@ -138,3 +138,12 @@ select {
 .centerText {
     text-align: center;
 }
+
+.tDiv {
+    width: 270px;
+    margin: 0 auto;
+}
+
+.ordIdInp {
+    width: 100px;
+}

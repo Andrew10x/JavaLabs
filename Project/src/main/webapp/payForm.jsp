@@ -8,15 +8,18 @@
     <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
-<c:import url="/HeaderServ" />
+<c:import url="/header.jsp" />
 <h2>Оплата замовлення</h2>
 <br />
-<% Map<String, String[]> mp = request.getParameterMap();%>
 
-<%if(Objects.equals(mp.get("success")[0], "false")) {%>
+<%if(!((boolean) request.getAttribute("success"))) {%>
 <form id="payForm" class="payForm" method="post" action="${pageContext.request.contextPath}/PayOrder">
     <div>
         <div>
+            <div class="marg">
+                <label for="orderId">Номер замовлення</label>
+                <input name="orderId" id="orderId" value="<%=request.getAttribute("orderId")%>" readonly="readonly">
+            </div>
             <div class="marg">
                 <label for="cardNumber1">Номер картки</label>
                 <input name="cardNumber1" id="cardNumber1" type="number" autocomplete="off" class="cardNumber margLeft5" min="0" max="9999"/>
@@ -39,7 +42,6 @@
         </div>
         <button class="calcButton" type="submit">Оплатити замовлення</button>
     </div>
-    </div>
 </form>
 <%} else {%>
 <h2>Замовлення оплачено</h2>
@@ -55,6 +57,7 @@
     const year = document.querySelector('#year');
     const cvc = document.querySelector('#cvc');
     const pib = document.querySelector('#pib');
+    if(form !== null)
     form.addEventListener('submit', function(evt) {
         evt.preventDefault();
         if(!cn1.value || cn1.value.length !== 4 || !cn2.value || cn2.value.length !== 4 ||

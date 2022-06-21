@@ -1,4 +1,5 @@
 <%@ page import="model.OrderJoinedModel" %>
+<%@ page import="java.util.Objects" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -18,9 +19,12 @@
     <form id="orderForm" class="orderForm" method="post" action="${pageContext.request.contextPath}/PrintOrder">
     <%}%>
         <div>
-        <div class="boldDiv centerText">Номер замовлення: <%=ojm.getId()%></div>
-            <div class="boldDiv">Отримувач</div>
+            <div class="tDiv">
+                <label for="orderId" class="boldDiv">Номер замовлення: </label>
+                <input value="<%=ojm.getId()%>" name="orderId" id="orderId" readonly="readonly" class="ordIdInp"/>
+            </div>
         <div>
+            <div class="boldDiv">Отримувач</div>
             <div class="marg">
                 <label for="pibRec">ПІБ отримувача</label>
                 <input name="pibRec" id="pibRec" readonly="readonly" value="<%=ojm.getRecipientName()%>"/>
@@ -83,8 +87,11 @@
             <div>Вартість доставки: <%=(int) ojm.getDeliveryCost()%> грн.</div>
         </div>
         <%if(!print) {%>
+        <%if(Objects.equals(ojm.getStatusName(), "Створено") || Objects.equals(ojm.getStatusName(), "Підтверджено")) {%>
         <button class="calcButton" type="submit">Оплатити</button>
         <%} else {%>
+        <button class="calcButton" type="submit" disabled="disabled">Оплачено</button>
+        <%}} else {%>
         <button class="calcButton" type="submit">Роздрукувати квитанцію</button>
         <%}%>
     </div>

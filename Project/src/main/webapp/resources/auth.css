@@ -2,6 +2,10 @@
     margin-top: 25px;
 }
 
+#pib {
+    color: #10861a;
+}
+
 .authForm {
     margin: 20px auto;
     width: 319px;

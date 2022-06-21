@@ -440,6 +440,28 @@ public class DBQueries {
         return result;
     }
 
+    public String getUserNameByOrderId(int orderId) throws SQLException {
+        String UserName = "";
+        try {
+            con = DBSingleton.getInstance().getConnection();
+            pr = con.prepareStatement("select u.username from Orders o join Users u on o.userid = u.userid where o.id = ?");
+            pr.setInt(1, orderId);
+
+            ResultSet res = pr.executeQuery();
+            if (res.next()) {
+                 UserName = res.getString(1);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (pr != null)
+                pr.close();
+            if (con != null)
+                con.close();
+        }
+        return UserName;
+    }
+
 }
 
 

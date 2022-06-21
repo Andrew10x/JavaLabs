@@ -1,6 +1,8 @@
 package Servlets;
 
 import letscode.DBQueries;
+import model.OrderJoinedModel;
+import model.OrderModel;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,22 +13,22 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 
-@WebServlet("/ChangeStatus")
-public class ChangeStatus extends HttpServlet {
+@WebServlet("/PrintOrder")
+public class PrintOrder extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, String[]> mp = req.getParameterMap();
-
+        int orderId = Integer.parseInt(mp.get("orderId")[0]);
         DBQueries dbq = new DBQueries();
+        OrderJoinedModel ojm;
         try {
-            dbq.changeStatus(Integer.parseInt(mp.get("orderId")[0]), Integer.parseInt(mp.get("statusId")[0]));
+            ojm = dbq.getOrderJoined(orderId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Hello");
+        req.setAttribute("orderId", mp.get("orderId")[0]);
+        req.setAttribute("userName", ojm.getUserName());
+        req.setAttribute("price", (int) ojm.getDeliveryCost());
+        getServletContext().getRequestDispatcher("/printOrder.jsp").forward(req, resp);
     }
 }

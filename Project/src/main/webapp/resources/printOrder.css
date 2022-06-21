@@ -1,0 +1,21 @@
+.printOrder {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    width: 600px;
+    grid-gap: 12px;
+    margin: 18px auto;
+}
+
+.printTitle {
+    margin-top: 40px;
+}
+
+.pibBordBottom {
+    border-bottom: 1px solid;
+    margin-right: 100px;
+}
+
+.singBordBottom {
+    border-bottom: 1px solid;
+    margin-right: 350px;
+}
