@@ -1,6 +1,9 @@
 package Servlets;
 
-import letscode.DBQueries;
+import DAO.CityDAO;
+import DAO.ConstantsDAO;
+import DAO.DirectionDAO;
+import DB.DBSingleton;
 import model.CityModel;
 import model.ConstantsModel;
 
@@ -9,7 +12,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,17 +22,22 @@ import java.util.Map;
 public class CalcPriceServ extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        DBQueries dbq = new DBQueries();
-        List<CityModel> cities = null;
+        CityDAO cd;
         try {
-            cities = dbq.getCities();
-        } catch (SQLException e) {
+            cd = new CityDAO(DBSingleton.getInstance().getConnection());
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+        List<CityModel> cities = cd.getAll();
         req.setAttribute("cities", cities);
 
         getServletContext().getRequestDispatcher("/main.jsp").forward(req, resp);
+
+        try {
+            DBSingleton.getInstance().getConnection().close();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -47,23 +54,24 @@ public class CalcPriceServ extends HttpServlet {
 
     public List<Float> calcPriceAndGetValues(HttpServletRequest req, HttpServletResponse resp) {
         Map<String, String[]> mp = req.getParameterMap();
-        DBQueries dbq = new DBQueries();
-        ConstantsModel distance, weight, avLength;
+        ConstantsDAO cd;
+        DirectionDAO dd;
         try {
-            distance = dbq.getConstants("distance");
-            weight = dbq.getConstants("weight");
-            avLength = dbq.getConstants("avLength");
-        } catch (SQLException e) {
+            cd = new ConstantsDAO(DBSingleton.getInstance().getConnection());
+            dd = new DirectionDAO(DBSingleton.getInstance().getConnection());
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+
+        ConstantsModel distance, weight, avLength;
+        distance = cd.get("distance");
+        weight = cd.get("weight");
+        avLength = cd.get("avLength");
+
         //Вартість доставки = вц0 + к1*(в/в0-1)*вк + мц0 + к2*(м/м0-1)*мк + оц0 + к3*(о/о0-1)*ок
         int k1 = 1, k2 = 1, k3 = 1;
         int v;
-        try {
-            v = dbq.getDistance(Integer.parseInt((mp.get("cityFrom"))[0]), Integer.parseInt((mp.get("cityTo"))[0]));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        v = dd.getByTwoFields(Integer.parseInt((mp.get("cityFrom"))[0]), Integer.parseInt((mp.get("cityTo"))[0])).getDistance();
         float m = Float.parseFloat((mp.get("weight"))[0]);
         int length = Integer.parseInt((mp.get("length"))[0]);
         int width = Integer.parseInt((mp.get("width"))[0]);
@@ -81,6 +89,13 @@ public class CalcPriceServ extends HttpServlet {
                 weight.getMinPrice() + k2*(m/weight.getMinValue() - 1)* weight.getCoef() + avLength.getMinPrice() +
                 k3*(o/ avLength.getMinValue() - 1)* avLength.getCoef());
 
+        try {
+            DBSingleton.getInstance().getConnection().close();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
         List<Float> l = new ArrayList<>();
         l.add(price);
         l.add((float) v);
@@ -88,5 +103,6 @@ public class CalcPriceServ extends HttpServlet {
         l.add(o);
         l.add(pCost);
         return l;
+
     }
 }

@@ -1,5 +1,7 @@
 package Servlets;
 
+import DAO.*;
+import DB.DBSingleton;
 import letscode.DBQueries;
 import model.CityModel;
 import model.OrderModel;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -21,14 +24,13 @@ import java.util.Objects;
 public class MakeOrderServ extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        DBQueries dbq = new DBQueries();
-        List<CityModel> cities = null;
+        CityDAO cd = null;
         try {
-            cities = dbq.getCities();
-        } catch (SQLException e) {
+            cd = new CityDAO(DBSingleton.getInstance().getConnection());
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+        List<CityModel> cities = cd.getAll();
         req.setAttribute("cities", cities);
 
         getServletContext().getRequestDispatcher("/makeOrder.jsp").forward(req, resp);
@@ -46,36 +48,52 @@ public class MakeOrderServ extends HttpServlet {
                 UserEmail = c.getValue();
         }
         if(Objects.equals(UserEmail, "")) {
-            resp.getWriter().write("Ви не авторизовані");
+            resp.getWriter().write("Please singup or singin");
             return;
         }
 
-        DBQueries dbq = new DBQueries();
-        OrderModel om = new OrderModel();
+        UserDAO ud;
+        DirectionDAO dd;
+        StatusDAO sd;
+        RecipientDAO rd;
+        OrderDAO od;
         try {
-            om.setUserId(dbq.getUserIdByEmail(UserEmail));
-            om.setDirectionId(dbq.getDirectionId(Integer.parseInt(mp.get("cityFrom")[0]),
-                    Integer.parseInt(mp.get("cityTo")[0])));
-            om.setStatusId(dbq.getStatusId("Створено"));
-            om.setWeightOrd(res.get(2));
-            om.setLengthOrd(Integer.parseInt(mp.get("length")[0]));
-            om.setHeightOrd(Integer.parseInt(mp.get("height")[0]));
-            om.setWidthOrd(Integer.parseInt(mp.get("width")[0]));
-            om.setTypeId(Integer.parseInt(mp.get("pType")[0]));
-            om.setSumInsured(Float.parseFloat(mp.get("pCost")[0]));
-            om.setAdress(mp.get("addressRec")[0]);
-            om.setDeliveryCost((int) (float) res.get(0));
+            Connection con = DBSingleton.getInstance().getConnection();
+            ud = new UserDAO(con);
+            dd = new DirectionDAO(con);
+            sd = new StatusDAO(con);
+            rd = new RecipientDAO(con);
+            od = new OrderDAO(con);
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        OrderModel om = new OrderModel();
+        om.setUserId(ud.get(UserEmail).getUserId());
+        om.setDirectionId(dd.getByTwoFields( Integer.parseInt(mp.get("cityFrom")[0]),
+                Integer.parseInt(mp.get("cityTo")[0])).getDirectionId());
+        om.setStatusId(sd.get("Створено").getStatusid());
+        om.setWeightOrd(res.get(2));
+        om.setLengthOrd(Integer.parseInt(mp.get("length")[0]));
+        om.setHeightOrd(Integer.parseInt(mp.get("height")[0]));
+        om.setWidthOrd(Integer.parseInt(mp.get("width")[0]));
+        om.setTypeId(Integer.parseInt(mp.get("pType")[0]));
+        om.setSumInsured(Float.parseFloat(mp.get("pCost")[0]));
+        om.setAdress(mp.get("addressRec")[0]);
+        om.setDeliveryCost((int) (float) res.get(0));
 
-            RecipientModel rm = new RecipientModel();
-            rm.setRecipientName(mp.get("pibRec")[0]);
-            rm.setRecipientPhone(mp.get("telRec")[0]);
-            int recId = dbq.addRecipient(rm);
-            om.setRecipientId(recId);
+        RecipientModel rm = new RecipientModel();
+        rm.setRecipientName(mp.get("pibRec")[0]);
+        rm.setRecipientPhone(mp.get("telRec")[0]);
+        int recId = rd.add(rm);
+        om.setRecipientId(recId);
 
-            int resId = dbq.addOrder(om);
-            req.setAttribute("id", resId);
-            getServletContext().getRequestDispatcher("/makeOrder/makeOrderSuccess.jsp").forward(req, resp);
-        } catch (SQLException e) {
+        int resId = od.add(om);
+        req.setAttribute("id", resId);
+        getServletContext().getRequestDispatcher("/makeOrder/makeOrderSuccess.jsp").forward(req, resp);
+
+        try {
+            DBSingleton.getInstance().getConnection().close();
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

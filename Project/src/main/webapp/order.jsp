@@ -87,8 +87,10 @@
             <div>Вартість доставки: <%=(int) ojm.getDeliveryCost()%> грн.</div>
         </div>
         <%if(!print) {%>
-        <%if(Objects.equals(ojm.getStatusName(), "Створено") || Objects.equals(ojm.getStatusName(), "Підтверджено")) {%>
+        <%if(Objects.equals(ojm.getStatusName(), "Підтверджено")) {%>
         <button class="calcButton" type="submit">Оплатити</button>
+        <%} else if(Objects.equals(ojm.getStatusName(), "Створено")){%>
+        <button class="calcButton" type="submit" disabled="disabled">Очікує підтвердження</button>
         <%} else {%>
         <button class="calcButton" type="submit" disabled="disabled">Оплачено</button>
         <%}} else {%>

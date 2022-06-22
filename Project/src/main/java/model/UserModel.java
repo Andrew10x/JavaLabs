@@ -13,6 +13,6 @@ public class UserModel {
     private String Phone;
     private String Email;
     private String PasswordUsr;
-    private String RoleId;
+    private int RoleId;
     private String RoleName;
 }

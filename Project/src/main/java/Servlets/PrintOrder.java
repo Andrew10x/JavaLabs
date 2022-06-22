@@ -1,8 +1,8 @@
 package Servlets;
 
-import letscode.DBQueries;
+import DAO.OrderJoinedDAO;
+import DB.DBSingleton;
 import model.OrderJoinedModel;
-import model.OrderModel;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,16 +19,23 @@ public class PrintOrder extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, String[]> mp = req.getParameterMap();
         int orderId = Integer.parseInt(mp.get("orderId")[0]);
-        DBQueries dbq = new DBQueries();
-        OrderJoinedModel ojm;
+        OrderJoinedDAO ojd;
         try {
-            ojm = dbq.getOrderJoined(orderId);
-        } catch (SQLException e) {
+            ojd = new OrderJoinedDAO(DBSingleton.getInstance().getConnection());
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+        OrderJoinedModel ojm = ojd.getById(orderId);
         req.setAttribute("orderId", mp.get("orderId")[0]);
         req.setAttribute("userName", ojm.getUserName());
         req.setAttribute("price", (int) ojm.getDeliveryCost());
+
+        try {
+            DBSingleton.getInstance().getConnection().close();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         getServletContext().getRequestDispatcher("/printOrder.jsp").forward(req, resp);
     }
 }

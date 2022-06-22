@@ -1,6 +1,7 @@
 package Servlets;
 
-import letscode.DBQueries;
+import DAO.OrderJoinedDAO;
+import DB.DBSingleton;
 import model.OrderJoinedModel;
 
 import javax.servlet.ServletException;
@@ -18,17 +19,24 @@ import java.util.Objects;
 public class MyOrders extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        DBQueries dbq = new DBQueries();
-        String email = getEmail(req);
-        List<OrderJoinedModel> data;
+        OrderJoinedDAO ojd;
         try {
-            data = dbq.getOrdersJoined(0, email, "", "", "", "");
-        } catch (SQLException e) {
+            ojd = new OrderJoinedDAO(DBSingleton.getInstance().getConnection());
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+        String email = getEmail(req);
+        List<OrderJoinedModel> data;
+        data = ojd.getAllWithFilter(0, email, "", "", "", "");
 
         req.setAttribute("data", data);
         getServletContext().getRequestDispatcher("/myOrders.jsp").forward(req, resp);
+
+        try {
+            DBSingleton.getInstance().getConnection().close();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getEmail(HttpServletRequest req) {

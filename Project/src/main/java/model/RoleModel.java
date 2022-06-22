@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DirectionModel {
-    private int DirectionId;
-    private int CityFromId;
-    private int CityToId;
-    private int Distance;
+public class RoleModel {
+    private int roleId;
+    private String roleName;
 }

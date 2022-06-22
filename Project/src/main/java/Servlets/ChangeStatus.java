@@ -1,6 +1,8 @@
 package Servlets;
 
-import letscode.DBQueries;
+import DAO.OrderDAO;
+import DB.DBSingleton;
+import model.OrderModel;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,17 +18,21 @@ public class ChangeStatus extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, String[]> mp = req.getParameterMap();
-
-        DBQueries dbq = new DBQueries();
+        OrderDAO od;
         try {
-            dbq.changeStatus(Integer.parseInt(mp.get("orderId")[0]), Integer.parseInt(mp.get("statusId")[0]));
-        } catch (SQLException e) {
+            od = new OrderDAO(DBSingleton.getInstance().getConnection());
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
+        OrderModel om = new OrderModel();
+        om.setId(Integer.parseInt(mp.get("orderId")[0]));
+        om.setStatusId(Integer.parseInt(mp.get("statusId")[0]));
+        od.update(om);
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Hello");
+        try {
+            DBSingleton.getInstance().getConnection().close();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,11 +1,12 @@
 package Servlets;
 
+import DAO.RoleDAO;
+import DAO.UserDAO;
+import DB.DBSingleton;
 import HelperClasses.Encryptor;
 import HelperClasses.Session;
-import letscode.CookieAction;
-import letscode.DBQueries;
+import model.RoleModel;
 import model.UserModel;
-import org.jasypt.util.password.BasicPasswordEncryptor;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,15 +25,16 @@ public class SingUpServ extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, String[]> mp = req.getParameterMap();
-        DBQueries dbq = new DBQueries();
-
+        UserDAO ud;
         try {
-            if(dbq.getPasswordAndRole(mp.get("login")[0]).getPasswordUsr() != null){
-                doGet(req, resp);
-                return;
-            }
-        } catch (SQLException e) {
+            ud = new UserDAO(DBSingleton.getInstance().getConnection());
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
+        }
+
+        if(ud.get(mp.get("login")[0]).getPasswordUsr()  != null){
+            doGet(req, resp);
+            return;
         }
 
         Encryptor enc = new Encryptor();
@@ -44,14 +46,22 @@ public class SingUpServ extends HttpServlet {
         userModel.setEmail(mp.get("login")[0]);
         userModel.setPasswordUsr(hashPassword);
 
-        boolean res;
+        RoleDAO rd;
         try {
-            res = dbq.addUser(userModel);
-        } catch (SQLException e) {
+            rd = new RoleDAO(DBSingleton.getInstance().getConnection());
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        if(!res){
-            resp.getWriter().write("Не вдалося додати користувача до БД");
+        RoleModel rm = rd.get("Registered user");
+        userModel.setRoleName(rm.getRoleName());
+        userModel.setRoleId(rm.getRoleId());
+
+
+        int res;
+        res = ud.add(userModel);
+
+        if(res == 0){
+            resp.getWriter().write("Add user error");
         }
         else {
             Session session = new Session(req);
@@ -59,10 +69,14 @@ public class SingUpServ extends HttpServlet {
             String name = "UserRole";
             String role = "RegisteredUser";
             Cookie c = new Cookie(name, role);
-            c.setMaxAge(-1);
             resp.addCookie(c);
             resp.sendRedirect(req.getContextPath() + "/");
         }
 
+        try {
+            DBSingleton.getInstance().getConnection().close();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

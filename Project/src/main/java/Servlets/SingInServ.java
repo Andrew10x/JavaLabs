@@ -1,9 +1,10 @@
 package Servlets;
+import DAO.UserDAO;
+import DB.DBSingleton;
 import HelperClasses.Encryptor;
 import HelperClasses.Session;
-import letscode.DBQueries;
-import model.PasswordAndRoleModel;
-import org.jasypt.util.password.BasicPasswordEncryptor;
+import model.UserModel;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,21 +29,22 @@ public class SingInServ extends HttpServlet {
         String login = mp.get("login")[0];
         String password = mp.get("password")[0];
 
-        DBQueries dbq = new DBQueries();
-        PasswordAndRoleModel prm = null;
+        UserDAO ud;
         try {
-            prm = dbq.getPasswordAndRole(login);
-        } catch (SQLException e) {
+            ud = new UserDAO(DBSingleton.getInstance().getConnection());
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        if(prm.getPasswordUsr() == null) {
+        UserModel um = ud.get(login);
+
+        if(um.getPasswordUsr() == null) {
             doGet(req, resp);
             return;
         }
 
         Encryptor enc = new Encryptor();
-        if(enc.checkPassword(password, prm.getPasswordUsr())) {
+        if(enc.checkPassword(password, um.getPasswordUsr())) {
             Session session = new Session(req);
             session.createSession();
 
@@ -56,6 +58,12 @@ public class SingInServ extends HttpServlet {
         }
         else {
             doGet(req, resp);
+        }
+
+        try {
+            DBSingleton.getInstance().getConnection().close();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
     }

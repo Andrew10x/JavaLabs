@@ -119,7 +119,7 @@ public class DBQueries {
             pr.setString(1,user.getUserName());
             pr.setString(2,user.getPhone());
             pr.setString(3,user.getEmail());
-            pr.setString(4, user.getPasswordUsr());
+            pr.setString(4,user.getPasswordUsr());
             pr.setInt(5, RoleId);
             result = pr.executeQuery().next();
         } catch (SQLException | ClassNotFoundException e) {

@@ -14,12 +14,6 @@ public class ExitServ extends HttpServlet {
         resp.addCookie(c1);
         Session session = new Session(req);
         session.closeSession();
-        /*if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                Cookie c = cookies[i];
-                resp.getWriter().write(c.getName() + " = " + c.getValue());
-            }
-        }*/
         resp.sendRedirect(req.getContextPath() + "/");
     }
 }
