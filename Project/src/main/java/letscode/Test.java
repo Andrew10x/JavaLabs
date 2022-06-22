@@ -26,11 +26,13 @@ public class Test {
         om.setStatusId(3);
         od.update(om);
     }
+
     public static void addOrder() throws SQLException, ClassNotFoundException {
         OrderDAO od = new OrderDAO(DBSingleton.getInstance().getConnection());
         OrderModel om = new OrderModel(0, 56, 111, "2022-06-17 13:48:28.0", 1, 12.0f, 12, 14, 40, 1, 1, 120.0f, "dsf", 133.0f);
         System.out.println(od.add(om));
     }
+
     public static void addRecipient1() throws SQLException, ClassNotFoundException {
         RecipientDAO rd = new RecipientDAO(DBSingleton.getInstance().getConnection());
         RecipientModel rm = new RecipientModel();
@@ -38,6 +40,7 @@ public class Test {
         rm.setRecipientName("Дмитро Вітер Васильович");
         System.out.println(rd.add(rm));
     }
+
     public static void getOrderJWithF() throws SQLException, ClassNotFoundException {
         OrderJoinedDAO oj1d = new OrderJoinedDAO(DBSingleton.getInstance().getConnection());
         List<OrderJoinedModel> ojml = oj1d.getAllWithFilter(0, "svt.andrey1631@gmail.com", "",
@@ -54,9 +57,9 @@ public class Test {
         DBSingleton.getInstance().getConnection().close();
         OrderJoinedDAO ojd = new OrderJoinedDAO(DBSingleton.getInstance().getConnection());
         OrderJoinedModel ojm = ojd.getById(12);
-            System.out.println(ojm.getAddress());
-            System.out.println(ojm.getRecipientName());
-            System.out.println(ojm.getCityFrom() + ojm.getCityTo());
+        System.out.println(ojm.getAddress());
+        System.out.println(ojm.getRecipientName());
+        System.out.println(ojm.getCityFrom() + ojm.getCityTo());
     }
 
     public static void getDirection() throws SQLException, ClassNotFoundException {
@@ -64,6 +67,7 @@ public class Test {
         DirectionModel dm = dd.getByTwoFields(2, 5);
         System.out.println(dm.getDirectionId() + " " + dm.getDistance());
     }
+
     public static void getRole() throws SQLException, ClassNotFoundException {
         RoleDAO rd = new RoleDAO(DBSingleton.getInstance().getConnection());
         RoleModel rm = rd.get("Manager");
@@ -84,6 +88,7 @@ public class Test {
         um.setUserName("qwewqe");
         System.out.println(ud.add(um));
     }
+
     public static void getUser() throws SQLException, ClassNotFoundException {
         UserDAO ud = new UserDAO(DBSingleton.getInstance().getConnection());
         UserModel um = ud.get("svt.andrey1631@gmail.com");
@@ -94,22 +99,23 @@ public class Test {
     public static void getConstants() throws SQLException, ClassNotFoundException {
         ConstantsDAO cd = new ConstantsDAO(DBSingleton.getInstance().getConnection());
         ConstantsModel cm = cd.get("distance");
-                System.out.println(cm.getId());
-                System.out.println(cm.getName());
-                System.out.println(cm.getMinPrice());
+        System.out.println(cm.getId());
+        System.out.println(cm.getName());
+        System.out.println(cm.getMinPrice());
     }
 
     public static void getCities() throws SQLException, ClassNotFoundException {
         CityDAO cd = new CityDAO(DBSingleton.getInstance().getConnection());
         List<CityModel> cm = cd.getAll();
 
-        for(CityModel c: cm) {
+        for (CityModel c : cm) {
             System.out.println(c.getCityId() + " " + c.getCityName());
         }
 
     }
+}
 
-    public static void changeStatus() throws SQLException {
+    /*public static void changeStatus() throws SQLException {
         DBQueries dbq = new DBQueries();
         System.out.println(dbq.changeStatus(1, 1));
     }
@@ -218,7 +224,7 @@ public class Test {
         /*List<CityModel> cml = dbq.getCities();
         for (CityModel cityModel : cml) {
             System.out.println(cityModel.getCityId() + " " + cityModel.getCityName());
-        }*/
+        }
     }
 
     public void date() {
@@ -229,7 +235,7 @@ public class Test {
         System.out.println(cal.get(Calendar.YEAR) + " " + cal.get(Calendar.MONTH)  + " "
                 + cal.get(Calendar.DAY_OF_MONTH) + " " + cal.get(Calendar.HOUR_OF_DAY) + " "
         + cal.get(Calendar.MINUTE));
-        System.out.println();*/
+        System.out.println();
     }
 
     public static void conn() throws ClassNotFoundException, SQLException {
@@ -264,4 +270,4 @@ public class Test {
         System.out.println("================================");
 
     }
-}
+}*/

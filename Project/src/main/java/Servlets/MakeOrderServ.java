@@ -2,7 +2,6 @@ package Servlets;
 
 import DAO.*;
 import DB.DBSingleton;
-import letscode.DBQueries;
 import model.CityModel;
 import model.OrderModel;
 import model.RecipientModel;
