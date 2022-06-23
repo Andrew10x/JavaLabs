@@ -21,7 +21,7 @@ import java.util.Map;
 @WebServlet("/")
 public class CalcPriceServ extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         CityDAO cd;
         try {
             cd = new CityDAO(DBSingleton.getInstance().getConnection());
@@ -31,7 +31,7 @@ public class CalcPriceServ extends HttpServlet {
         List<CityModel> cities = cd.getAll();
         req.setAttribute("cities", cities);
 
-        getServletContext().getRequestDispatcher("/main.jsp").forward(req, resp);
+        req.getRequestDispatcher("/main.jsp").forward(req, resp);
 
         try {
             DBSingleton.getInstance().getConnection().close();
@@ -41,7 +41,7 @@ public class CalcPriceServ extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Float> res = calcPriceAndGetValues(req, resp);
 
         req.setAttribute("price", (int) (float) res.get(0));
@@ -49,7 +49,7 @@ public class CalcPriceServ extends HttpServlet {
         req.setAttribute("weight", res.get(2));
         req.setAttribute("evLength", (int) (float) (res.get(3)));
         req.setAttribute("pCost", (int) (float) (res.get(4)));
-        getServletContext().getRequestDispatcher("/showCalcPrice.jsp").forward(req, resp);
+        req.getRequestDispatcher("/showCalcPrice.jsp").forward(req, resp);
     }
 
     public List<Float> calcPriceAndGetValues(HttpServletRequest req, HttpServletResponse resp) {

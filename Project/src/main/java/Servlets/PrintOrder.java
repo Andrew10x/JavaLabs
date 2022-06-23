@@ -16,7 +16,7 @@ import java.util.Map;
 @WebServlet("/PrintOrder")
 public class PrintOrder extends HttpServlet {
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, String[]> mp = req.getParameterMap();
         int orderId = Integer.parseInt(mp.get("orderId")[0]);
         OrderJoinedDAO ojd;
@@ -36,6 +36,6 @@ public class PrintOrder extends HttpServlet {
             throw new RuntimeException(e);
         }
 
-        getServletContext().getRequestDispatcher("/printOrder.jsp").forward(req, resp);
+        req.getRequestDispatcher("/printOrder.jsp").forward(req, resp);
     }
 }

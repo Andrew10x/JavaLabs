@@ -22,7 +22,7 @@ import java.util.Objects;
 @WebServlet("/MakeOrder")
 public class MakeOrderServ extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         CityDAO cd = null;
         try {
             cd = new CityDAO(DBSingleton.getInstance().getConnection());
@@ -32,11 +32,11 @@ public class MakeOrderServ extends HttpServlet {
         List<CityModel> cities = cd.getAll();
         req.setAttribute("cities", cities);
 
-        getServletContext().getRequestDispatcher("/makeOrder.jsp").forward(req, resp);
+        req.getRequestDispatcher("/makeOrder.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, String[]> mp = req.getParameterMap();
         CalcPriceServ cps = new CalcPriceServ();
         List<Float> res = cps.calcPriceAndGetValues(req, resp);
@@ -88,7 +88,7 @@ public class MakeOrderServ extends HttpServlet {
 
         int resId = od.add(om);
         req.setAttribute("id", resId);
-        getServletContext().getRequestDispatcher("/makeOrder/makeOrderSuccess.jsp").forward(req, resp);
+        req.getRequestDispatcher("/makeOrder/makeOrderSuccess.jsp").forward(req, resp);
 
         try {
             DBSingleton.getInstance().getConnection().close();

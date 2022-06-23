@@ -22,8 +22,9 @@ import java.util.Objects;
 
 @WebServlet("/AllOrders")
 public class AllOrders extends HttpServlet {
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         OrderJoinedDAO ojd;
         StatusDAO sd;
         CityDAO cd;
@@ -52,7 +53,7 @@ public class AllOrders extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         StatusDAO sd;
         OrderJoinedDAO ojd;
         CityDAO cd;
@@ -91,6 +92,7 @@ public class AllOrders extends HttpServlet {
         req.setAttribute("data", data);
         req.setAttribute("statuses", statuses);
         req.setAttribute("cities", cities);
-        getServletContext().getRequestDispatcher("/allOrders.jsp").forward(req, resp);
+        req.getRequestDispatcher("/allOrders.jsp").forward(req, resp);
     }
+
 }

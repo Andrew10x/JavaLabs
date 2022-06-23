@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public class Test {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        updateOrder();
+        getUser();
     }
 
     public static void updateOrder() throws SQLException, ClassNotFoundException {
@@ -45,6 +45,7 @@ public class Test {
         OrderJoinedDAO oj1d = new OrderJoinedDAO(DBSingleton.getInstance().getConnection());
         List<OrderJoinedModel> ojml = oj1d.getAllWithFilter(0, "svt.andrey1631@gmail.com", "",
                 "", "", "");
+
         OrderJoinedModel ojm = ojml.get(0);
         System.out.println(ojm.getEmail());
         System.out.println(ojm.getRecipientName());
@@ -94,6 +95,7 @@ public class Test {
         UserModel um = ud.get("svt.andrey1631@gmail.com");
         System.out.println(um.getEmail() + " " + um.getUserName() + " " + um.getRoleName());
         System.out.println(um.getPasswordUsr());
+        System.out.println(um.getPhone());
     }
 
     public static void getConstants() throws SQLException, ClassNotFoundException {

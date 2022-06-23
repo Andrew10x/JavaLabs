@@ -15,16 +15,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Objects;
 
 @WebServlet("/SingInServ")
 public class SingInServ extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/auth/singinError.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, String[]> mp = req.getParameterMap();
         String login = mp.get("login")[0];
         String password = mp.get("password")[0];
@@ -48,7 +49,10 @@ public class SingInServ extends HttpServlet {
             Session session = new Session(req);
             session.createSession();
 
-            Cookie c = new Cookie("UserRole", "Manager");
+
+            if(!Objects.equals(um.getRoleName(), "Manager"))
+                um.setRoleName("RegisteredUser");
+            Cookie c = new Cookie("UserRole", um.getRoleName());
             c.setMaxAge(-1);
             resp.addCookie(c);
             Cookie c1 = new Cookie("UserEmail", login);

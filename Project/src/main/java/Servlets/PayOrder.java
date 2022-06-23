@@ -18,7 +18,7 @@ import java.util.Map;
 @WebServlet("/PayOrder")
 public class PayOrder extends HttpServlet {
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, String[]> mp = req.getParameterMap();
         req.setAttribute("orderId", mp.get("orderId")[0]);
         req.setAttribute("success", false);
@@ -38,7 +38,7 @@ public class PayOrder extends HttpServlet {
             od.update(om);
             req.setAttribute("success", true);
         }
-        getServletContext().getRequestDispatcher("/payForm.jsp").forward(req, resp);
+        req.getRequestDispatcher("/payForm.jsp").forward(req, resp);
 
         try {
             DBSingleton.getInstance().getConnection().close();

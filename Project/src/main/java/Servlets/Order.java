@@ -16,7 +16,7 @@ import java.util.Map;
 @WebServlet("/Order")
 public class Order extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, String[]> mp = req.getParameterMap();
         int id = Integer.parseInt(mp.get("id")[0]);
 
@@ -32,7 +32,7 @@ public class Order extends HttpServlet {
         if(mp.containsKey("print")) {
             req.setAttribute("print", true);
         }
-        getServletContext().getRequestDispatcher("/order.jsp").forward(req, resp);
+        req.getRequestDispatcher("/order.jsp").forward(req, resp);
 
         try {
             DBSingleton.getInstance().getConnection().close();

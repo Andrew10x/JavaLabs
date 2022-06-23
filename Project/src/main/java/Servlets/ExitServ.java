@@ -9,7 +9,7 @@ import java.io.IOException;
 @WebServlet("/ExitServ")
 public class ExitServ extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Cookie c1 = new Cookie("UserRole", "");
         resp.addCookie(c1);
         Session session = new Session(req);
